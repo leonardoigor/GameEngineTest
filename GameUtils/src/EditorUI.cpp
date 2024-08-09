@@ -41,7 +41,7 @@ void EditorUI::ShowViewport()
 
 void EditorUI::ShowInspector()
 {
-    ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("Inspector");
 
     if (selectedObject)
     {
@@ -73,7 +73,11 @@ void EditorUI::ShowHierarchy()
 
     ImGui::End();
 }
-
+// void EditorUI::ShowDockSpace()
+// {
+//     // Enable Docking
+//     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+// }
 void EditorUI::ShowConsole()
 {
     ImGui::Begin("Console");
@@ -86,5 +90,17 @@ void EditorUI::ShowConsole()
 
 void EditorUI::LogMessage(const std::string &message)
 {
-    logMessages.push_back(message);
+    // Get the current time
+    std::time_t now = std::time(nullptr);
+    std::tm *localTime = std::localtime(&now);
+
+    // Format the time as {YYYY-MM-DD HH:MM:SS}
+    std::ostringstream timeStream;
+    timeStream << std::put_time(localTime, "[%Y-%m-%d %H:%M:%S]");
+
+    // Create the log entry with the date and message
+    std::string logEntry = timeStream.str() + " - " + message;
+
+    // Add the log entry to the logMessages vector
+    logMessages.push_back(logEntry);
 }

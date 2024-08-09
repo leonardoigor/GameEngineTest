@@ -5,11 +5,21 @@
 #include <vector>
 #include <string>
 
+#include <iostream>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
 class EditorUI
 {
 public:
-    EditorUI() {};
-    EditorUI(Scene *scene) : currentScene(scene), selectedObject(nullptr) {}
+    EditorUI()
+    {
+        LogMessage("teste");
+    };
+    EditorUI(Scene *scene) : currentScene(scene), selectedObject(nullptr)
+    {
+        LogMessage("teste");
+    }
 
     void Render()
     {
