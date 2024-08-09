@@ -21,3 +21,11 @@ target_link_libraries(App PRIVATE glfw)
 # target_link_libraries(App PRIVATE imgui::imgui)
 target_link_libraries(App PRIVATE imgui)
 target_link_libraries(App PUBLIC GameUtils)
+
+# Adicione um alvo para copiar os arquivos após a construção
+add_custom_command(TARGET App POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${VCPKG_INSTALLED_DIR}/bin
+    ${CMAKE_SOURCE_DIR}/output
+    COMMENT "Copying all items from ${SOURCE_DIR} to ${DESTINATION_DIR}"
+)

@@ -61,6 +61,7 @@ endforeach()
 
 include_directories(${VCPKG_INSTALLED_DIR}/include)
 link_directories(${VCPKG_INSTALLED_DIR}/lib)
+link_directories(${VCPKG_INSTALLED_DIR}/bin)
 
 # Ensure the toolchain file is used
 if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
