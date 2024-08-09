@@ -6,6 +6,7 @@
 
 int main(int argc, char const *argv[])
 {
+    std::cout << "teste" << std::endl;
     if (!glfwInit())
         return 1;
 

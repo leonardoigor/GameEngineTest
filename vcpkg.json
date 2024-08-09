@@ -3,14 +3,6 @@
     "version": "1.0",
     "builtin-baseline": "8ae59b5b1329a51875abc71d528da93d9c3e8972",
     "dependencies": [
-        {
-            "name": "imgui",
-            "features": [
-                "docking",
-                "glfw-binding",
-                "opengl3-binding"
-            ]
-        },
         "glad",
         "glfw3"
     ]

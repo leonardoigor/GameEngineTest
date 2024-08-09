@@ -1,4 +1,6 @@
 include_directories(include)
+set(ImGuiDir ${CMAKE_SOURCE_DIR}/vendor/imgui)
+include_directories(${ImGuiDir})
 
 file(GLOB_RECURSE FilesINFolder *.cpp *.h *hpp)
 

@@ -33,6 +33,9 @@ if(NOT EXISTS ${VCPKG_EXECUTABLE})
     message(FATAL_ERROR "vcpkg executable not found at ${VCPKG_EXECUTABLE}. Please ensure vcpkg is installed.")
 endif()
 
+include(cmakes/updateSubModules.cmake)
+include(cmakes/imguiCreateLibrary.cmake)
+
 # Install dependencies specified in vcpkg.json
 execute_process(
     COMMAND ${VCPKG_EXECUTABLE} install
@@ -66,7 +69,8 @@ endif()
 
 # Project setup
 find_package(glad CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
+
+# find_package(imgui CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 
 add_subdirectory(GameUtils)
