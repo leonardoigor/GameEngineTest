@@ -15,26 +15,24 @@ public:
     EditorUI()
     {
         LogMessage("teste");
+        isRunning = true;
     };
     EditorUI(Scene *scene) : currentScene(scene), selectedObject(nullptr)
     {
         LogMessage("teste");
+        isRunning = true;
     }
+    void ShowDockSpace();
+    void Render();
 
-    void Render()
-    {
-        ShowMainMenuBar();
-        ShowViewport();
-        ShowInspector();
-        ShowHierarchy();
-        ShowConsole();
-    }
+    bool isRunning = false;
 
 private:
     Scene *currentScene;
     GameObject *selectedObject;
     std::vector<std::string> logMessages;
 
+public:
     void ShowMainMenuBar();
 
     void ShowViewport();
@@ -44,7 +42,5 @@ private:
     void ShowHierarchy();
 
     void ShowConsole();
-
-public:
     void LogMessage(const std::string &message);
 };

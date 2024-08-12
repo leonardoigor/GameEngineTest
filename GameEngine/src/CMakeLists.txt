@@ -26,6 +26,6 @@ target_link_libraries(App PUBLIC GameUtils)
 add_custom_command(TARGET App POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${VCPKG_INSTALLED_DIR}/bin
-    ${CMAKE_SOURCE_DIR}/output
+    ${CMAKE_SOURCE_DIR}/output/GameEngine
     COMMENT "Copying all items from ${SOURCE_DIR} to ${DESTINATION_DIR}"
 )

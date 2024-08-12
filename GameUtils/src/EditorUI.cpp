@@ -15,6 +15,10 @@ void EditorUI::ShowMainMenuBar()
             if (ImGui::MenuItem("Save"))
             { /* Save Scene Code */
             }
+            if (ImGui::MenuItem("Exit"))
+            {
+                isRunning = false;
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit"))
@@ -33,7 +37,9 @@ void EditorUI::ShowMainMenuBar()
 
 void EditorUI::ShowViewport()
 {
-    ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
+    ImGui::Begin("Viewport");
+
+    // ShowMainMenuBar();
     // Renderização da cena vai aqui
     ImGui::Image((void *)nullptr, ImVec2(1280, 720)); // Substituir com a textura renderizada da cena
     ImGui::End();
@@ -41,22 +47,24 @@ void EditorUI::ShowViewport()
 
 void EditorUI::ShowInspector()
 {
-    ImGui::Begin("Inspector");
-
-    if (selectedObject)
+    if (ImGui::BeginChild("Inspector"))
     {
-        ImGui::Text("Transform");
-        ImGui::DragFloat3("Position", selectedObject->position);
-        ImGui::DragFloat3("Rotation", selectedObject->rotation);
-        ImGui::DragFloat3("Scale", selectedObject->scale);
 
-        if (ImGui::CollapsingHeader("Render"))
+        if (selectedObject)
         {
-            ImGui::ColorEdit4("Color", selectedObject->color);
-        }
-    }
+            ImGui::Text("Transform");
+            ImGui::DragFloat3("Position", selectedObject->position);
+            ImGui::DragFloat3("Rotation", selectedObject->rotation);
+            ImGui::DragFloat3("Scale", selectedObject->scale);
 
-    ImGui::End();
+            if (ImGui::CollapsingHeader("Render"))
+            {
+                ImGui::ColorEdit4("Color", selectedObject->color);
+            }
+        }
+
+        ImGui::EndChild();
+    }
 }
 
 void EditorUI::ShowHierarchy()
@@ -73,11 +81,73 @@ void EditorUI::ShowHierarchy()
 
     ImGui::End();
 }
-// void EditorUI::ShowDockSpace()
-// {
-//     // Enable Docking
-//     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-// }
+void EditorUI::ShowDockSpace()
+{
+    ImGuiID dockSpaceID = ImGui::GetID("MyDockSpace");
+
+    // Enable Docking
+    ImGuiViewport *viewport = ImGui::GetMainViewport();
+    ImGui::DockSpace(dockSpaceID, ImVec2(0, 0), ImGuiDockNodeFlags_PassthruCentralNode);
+
+    // Setup the dock layout (only needs to be done once)
+    static bool setupDone = false;
+    if (!setupDone)
+    {
+        // ImGui::DockBuilderAddNode(dockSpaceID, ImGuiDockNodeFlags_DockSpace);
+        // ImGui::DockBuilderSetNodeSize(dockSpaceID, viewport->Size);
+
+        // ImGuiID dockId = dockSpaceID;
+        // ImGuiID dockRightID = ImGui::DockBuilderSplitNode(dockId, ImGuiDir_Right, 0.25f, NULL, &dockId);
+        // ImGui::DockBuilderDockWindow("Inspector", dockRightID);
+        // ImGui::DockBuilderFinish(dockSpaceID);
+
+        setupDone = true;
+    }
+}
+void EditorUI::Render()
+{
+
+    ShowMainMenuBar();
+    ShowDockSpace();
+    // ShowHierarchy();
+    // ShowConsole();
+    // ShowViewport();
+    // ShowInspector();
+    const ImGuiViewport *main_viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(ImVec2(main_viewport->WorkPos.x + 650, main_viewport->WorkPos.y + 20), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(550, main_viewport->Size.y), ImGuiCond_FirstUseEver);
+
+    if (!ImGui::Begin("Main Window", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_MenuBar))
+    {
+        ImGui::End();
+        return;
+    }
+    else
+    {
+        ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
+
+        ImVec2 viewportSize = ImGui::GetMainViewport()->Size;
+        ImGui::SetWindowSize(viewportSize);
+        ImGui::SetWindowPos(ImVec2(0, 20));
+        // Create dockable child windows
+        ImGui::End();
+    }
+    if (ImGui::Begin("Dockable Child Window 1", nullptr, ImGuiWindowFlags_ChildWindow | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_ChildWindow))
+    {
+        ImVec2 viewportSize = ImGui::GetMainViewport()->Size;
+        ImVec2 newsize = ImVec2(10, 20);
+        ImGui::SetWindowSize(newsize);
+        ImGui::SetWindowPos(ImVec2(0, 20));
+
+        ImGui::Text("This is a dockable child window.");
+        ImGui::EndChild();
+        // ImGui::End();
+    }
+    else
+    {
+        ImGui::End();
+    }
+}
 void EditorUI::ShowConsole()
 {
     ImGui::Begin("Console");
