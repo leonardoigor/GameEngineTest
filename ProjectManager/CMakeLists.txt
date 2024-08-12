@@ -17,6 +17,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_SOURCE_DIR}/output/ProjectMan
 
 set(GameUtilsDir ${CMAKE_SOURCE_DIR}/GameUtils/include)
 set(ImGuiDir ${CMAKE_SOURCE_DIR}/vendor/imgui)
+set(ImGuiDir ${CMAKE_SOURCE_DIR}/vendor/ImGuiFileDialog)
 
 include_directories(${ImGuiDir})
 include_directories(${GameUtilsDir})
@@ -31,6 +32,7 @@ target_link_libraries(ProjectManager PRIVATE glfw)
 
 target_link_libraries(ProjectManager PRIVATE imgui)
 target_link_libraries(ProjectManager PUBLIC GameUtils)
+target_link_libraries(ProjectManager PUBLIC ImGuiFileDialog)
 
 # Adicione um alvo para copiar os arquivos após a construção
 add_custom_command(TARGET ProjectManager POST_BUILD

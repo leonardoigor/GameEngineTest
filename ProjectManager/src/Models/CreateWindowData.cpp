@@ -10,5 +10,5 @@ CreateWindowData::~CreateWindowData()
 
 std::string CreateWindowData::ProjectPathFull()
 {
-    return projectPath + "/" + projectName;
+    return projectPath + "\\" + projectName;
 }

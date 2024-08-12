@@ -116,9 +116,16 @@ void UseImGuiPM::ShowMainMenuBar()
 void UseImGuiPM::NewProjectWindow()
 {
     std::string projectPath = createWindowData.ProjectPathFull();
-
+    const ImGuiViewport *main_viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(ImVec2(main_viewport->WorkPos.x + 650, main_viewport->WorkPos.y + 20), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(550, main_viewport->Size.y), ImGuiCond_FirstUseEver);
     if (ImGui::Begin("New Project", &isNewProjectWindow))
     {
+        ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
+
+        ImVec2 viewportSize = ImGui::GetMainViewport()->Size;
+        ImGui::SetWindowSize(viewportSize);
+        ImGui::SetWindowPos(ImVec2(0, 20));
         int lettterCount = 0;
         getCharacterCounts(createWindowData.projectName, lettterCount);
         // Input field for the project name
@@ -128,21 +135,28 @@ void UseImGuiPM::NewProjectWindow()
         ImGui::Text("Save Path: %s", projectPath.c_str());
 
         // Button to change the path (in a real application, this would open a file dialog)
+        auto instance = ImGuiFileDialog::Instance();
         if (ImGui::Button("Change Path"))
         {
-            ImGuiFileDialog::Instance()->OpenDialog("ChooseFolderDlg", "Choose Folder", ".", "");
+            IGFD::FileDialogConfig config;
+            config.path = ".";
+            config.countSelectionMax = 1;
 
-            // Handle folder dialog result
-            if (ImGuiFileDialog::Instance()->Display("ChooseFolderDlg"))
-            {
-                if (ImGuiFileDialog::Instance()->IsOk())
-                {
-                    // Get the selected folder path
-                    projectPath = ImGuiFileDialog::Instance()->GetFolderPath();
-                }
-                // Close the dialog
-                ImGuiFileDialog::Instance()->Close();
+            instance->OpenDialog("ChooseFileDlgKey", "Choose Folder", nullptr, config);
+            // display
+        }
+        if (instance->Display("ChooseFileDlgKey"))
+        {
+            if (instance->IsOk())
+            { // action if OK
+                std::string filePathName = instance->GetFilePathName();
+                std::string filePath = instance->GetCurrentPath();
+                // action
+                createWindowData.projectPath = filePath;
             }
+
+            // close
+            ImGuiFileDialog::Instance()->Close();
         }
 
         // Button to create the project

@@ -34,6 +34,7 @@ if(NOT EXISTS ${VCPKG_EXECUTABLE})
 endif()
 
 include(cmakes/updateSubModules.cmake)
+include(cmakes/imguiFileDialodCreateLibrary.cmake)
 include(cmakes/imguiCreateLibrary.cmake)
 
 # Install dependencies specified in vcpkg.json
