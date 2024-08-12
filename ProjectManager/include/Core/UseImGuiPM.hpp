@@ -9,7 +9,9 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <ImGuiFileDialog.h>
 #include <Models/CreateWindowData.hpp>
+#include <iostream>
 
+#include <filesystem>
 class UseImGuiPM
 {
 private:
@@ -25,6 +27,7 @@ public:
     void NewFrame();
     bool isRunning();
     void NewProjectWindow();
+    void CreateProject(CreateWindowData createWindowData);
 
     Scene scene;
     EditorUI editorUI;

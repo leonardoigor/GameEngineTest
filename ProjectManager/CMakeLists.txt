@@ -41,3 +41,11 @@ add_custom_command(TARGET ProjectManager POST_BUILD
     ${CMAKE_SOURCE_DIR}/output/ProjectManager
     COMMENT "Copying all items from ${SOURCE_DIR} to ${DESTINATION_DIR}"
 )
+
+# Adicione um template para copiar os arquivos após a construção
+add_custom_command(TARGET ProjectManager POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/ProjectManager/templates
+    ${CMAKE_SOURCE_DIR}/output/ProjectManager/templates
+    COMMENT "Copying all items from ${SOURCE_DIR} to ${DESTINATION_DIR}"
+)

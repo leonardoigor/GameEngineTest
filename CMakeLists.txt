@@ -5,6 +5,8 @@ set(VCPKG_LIB_NAMES
     imgui
     glfw3
 )
+set(CMAKE_CXX_STANDARD 17) # Use C++17
+set(CMAKE_CXX_STANDARD_REQUIRED True) # Enforce the standar
 
 # Set the output directory for executables
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/output/GameEngine)

@@ -1,0 +1,21 @@
+#include "GameHander.hpp"
+
+GameHander::GameHander(/* args */)
+{
+}
+
+GameHander::~GameHander()
+{
+}
+
+inline void GameHander::Awake()
+{
+}
+
+inline void GameHander::Start()
+{
+}
+
+inline void GameHander::Update()
+{
+}

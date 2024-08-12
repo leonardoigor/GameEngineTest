@@ -1,0 +1,12 @@
+class GameHander
+{
+private:
+    /* data */
+public:
+    GameHander(/* args */);
+    ~GameHander();
+
+    void Awake();
+    void Start();
+    void Update();
+};

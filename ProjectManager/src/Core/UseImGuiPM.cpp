@@ -167,7 +167,106 @@ void UseImGuiPM::NewProjectWindow()
 
             // Close the window after creating the project
             isNewProjectWindow = false;
+
+            CreateProject(createWindowData);
         }
     }
     ImGui::End();
+}
+
+// Function to load a template file into a string
+std::string loadTemplate(const std::string &filePath)
+{
+    std::ifstream file(filePath);
+    if (!file.is_open())
+    {
+        throw std::runtime_error("Failed to open template file: " + filePath);
+    }
+
+    std::string content((std::istreambuf_iterator<char>(file)),
+                        std::istreambuf_iterator<char>());
+    return content;
+}
+// Function to process the template (e.g., replace placeholders)
+std::string processTemplate(const std::string &templateContent)
+{
+    std::string processedContent = templateContent;
+    // Example: Replace a placeholder with actual content
+    std::string placeholder = "{{PLACEHOLDER}}";
+    std::string actualContent = "Actual content";
+    size_t pos = processedContent.find(placeholder);
+    while (pos != std::string::npos)
+    {
+        processedContent.replace(pos, placeholder.length(), actualContent);
+        pos = processedContent.find(placeholder, pos + actualContent.length());
+    }
+    return processedContent;
+}
+// Function to write the processed content to a new file
+void writeFile(const std::string &filePath, const std::string &content)
+{
+    std::ofstream file(filePath);
+    if (!file.is_open())
+    {
+        throw std::runtime_error("Failed to open output file: " + filePath);
+    }
+    file << content;
+}
+std::string getLastExtension(const std::filesystem::path &filePath)
+{
+    std::string extension = filePath.extension().string();
+    std::string filename = filePath.stem().string();
+
+    // Loop to get the last extension
+    while (!extension.empty() && filename.find('.') != std::string::npos)
+    {
+        filename = filename.substr(filename.find_last_of('.') + 1);
+        extension = filePath.extension().string();
+    }
+
+    return filename;
+} // Function to remove ".template" from the filename
+std::string removeTemplateExtension(const std::string &filename)
+{
+    std::string::size_type pos = filename.find_last_of('.');
+    if (pos != std::string::npos && filename.substr(pos) == ".template")
+    {
+        return filename.substr(0, pos); // Remove ".template"
+    }
+    return filename; // Return the original filename if ".template" is not found
+}
+void UseImGuiPM::CreateProject(CreateWindowData createWindowData)
+{
+    std::filesystem::path currentPath = std::filesystem::current_path();
+    std::string templateName = "NewProjectBase";
+    std::string templateDirectory = currentPath.string() + "\\templates" + "\\" + templateName; // Directory containing the .template files
+
+    try
+    {
+        for (const auto &entry : std::filesystem::directory_iterator(templateDirectory))
+        {
+            if (entry.path().extension() == ".template")
+            {
+                std::string templatePath = entry.path().string();
+                std::string outputPath = removeTemplateExtension(entry.path().filename().string());
+
+                try
+                {
+                    std::string templateContent = loadTemplate(templatePath);
+                    std::string processedContent = processTemplate(templateContent);
+                    writeFile(outputPath, processedContent);
+
+                    std::cout << "Generated " << outputPath << " from " << templatePath << std::endl;
+                }
+                catch (const std::exception &e)
+                {
+                    std::cerr << "Error: " << e.what() << std::endl;
+                }
+            }
+        }
+    }
+    catch (const std::filesystem::filesystem_error &e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
 }
